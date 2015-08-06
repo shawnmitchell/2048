@@ -12,7 +12,7 @@ function runGame(){
     for (i = 0; i < board.length; i++)
       for (j = 0; j < board[i].length; j++)
         if (board[i][j] == 0)
-          openSpots.push({x:i, y:j});
+          openSpots.push({x:i, y:j});  // here we record the i,j coordinates of the blank spaces in an array
 
     var index = Math.floor(Math.random() * openSpots.length);
     var luckySquare = openSpots[index];
