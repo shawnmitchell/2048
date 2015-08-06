@@ -82,6 +82,10 @@ function printKey(e){
 
     e = e || window.event;
 
+    // need to know if anything changed before we go redrawing the screen
+    // and adding a new tile
+    var didChange = false;
+
     if (e.keyCode == '40') {
         // down arrow
         for (j = 0; j < board.length; j++) {
@@ -105,7 +109,9 @@ function printKey(e){
                 list.unshift(0);
             }
 
-            for (var i = 0; i < board.length; i++){
+            for (var i = 0; i < board.length; i++) {
+                if (board[i][j] != list[i])
+                  didChange = true;
                 board[i][j] = list[i]
             }
         }
@@ -135,7 +141,9 @@ function printKey(e){
             }
 
             for (i = 0; i < board.length; i++){
-                board[i][j] = list[i]
+              if (board[i][j] != list[i])
+                didChange = true;
+              board[i][j] = list[i]
             }
         }
     }
@@ -164,7 +172,9 @@ function printKey(e){
             }
 
             for (var j = 0; j < board.length; j++){
-                board[i][j] = list[j]
+              if (board[i][j] != list[j])
+                didChange = true;
+              board[i][j] = list[j]
             }
         }
     }
@@ -192,12 +202,15 @@ function printKey(e){
             }
 
             for (var j = 0; j < board.length; j++){
-                board[i][j] = list[j]
+              if (board[i][j] != list[j])
+                didChange = true;
+              board[i][j] = list[j]
             }
         }
     }
     else {
       return
     }
-    runGame();
+    if (didChange)
+      runGame();
 }
