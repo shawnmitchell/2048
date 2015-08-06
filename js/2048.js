@@ -1,25 +1,66 @@
 var board = [[0,0,0,0],[0,0,2,0],[0,0,0,0],[0,0,0,0]];
 
-function runGame(){
+function addTile() {
+  var toAddValue = 2;
+  // new block is 4 10% of the time
+  if (Math.floor(Math.random() * 10) == 0)
+    toAddValue = 4;
 
-    var toAddValue = 2;
-    // new block is 4 10% of the time
-    if (Math.floor(Math.random() * 10) == 0)
-      toAddValue = 4;
+  // where to add new block
+  var openSpots = [];
+  for (i = 0; i < board.length; i++)
+    for (j = 0; j < board[i].length; j++)
+      if (board[i][j] == 0)
+        openSpots.push({x:i, y:j});  // here we record the i,j coordinates of the blank spaces in an array
+  var index = Math.floor(Math.random() * openSpots.length);
+  var luckySquare = openSpots[index];
+  board[luckySquare.x][luckySquare.y] = toAddValue;
+  if (openSpots.length == 1) {
+      return 0
+  }
+}
 
-    // where to add new block
-    var openSpots = [];
-    for (i = 0; i < board.length; i++)
-      for (j = 0; j < board[i].length; j++)
-        if (board[i][j] == 0)
-          openSpots.push({x:i, y:j});  // here we record the i,j coordinates of the blank spaces in an array
+function legalMoves() {
+  for (var i = 0; i < board.length-1; i++) {
+    for (var j = 0; j < board[i].length-1; j++) {
+      if (board[i][j] == board[i][j+1] || board[i][j] == board[i+1][j]) {
+        console.log(i, j);
+        return 1
+      }
+    }
+  }
+  for (i = 0; i < board.length-1; i++)
+    if (board[i][board[0].length-1] == board[i+1][board[0].length-1])
+      return 1
+  for (j = 0; j < board[0].length-1; j++)
+    if (board[board.length-1][j] == board[board.length-1][j+1])
+      return 1
+  return 0
+}
 
-    var index = Math.floor(Math.random() * openSpots.length);
-    var luckySquare = openSpots[index];
-    board[luckySquare.x][luckySquare.y] = toAddValue;
+function restart() {
+  board = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+  addTile();
+  runGame();
+}
 
+function runGame() {
 
-    for (var i = 0; i < board.length; i++) {
+  var addTileSuccess = addTile();
+
+  drawBoard();
+
+  if (addTileSuccess == 0) {
+    if (legalMoves() == 0) {
+      alert("Game Over");
+      restart();
+    }
+  }
+}
+
+function drawBoard() {
+
+   for (var i = 0; i < board.length; i++) {
         for (var j = 0; j < board[i].length; j++) {
             var boardID = "r"+i+"c"+j;
             if (board[i][j]!=0) {
